@@ -3,9 +3,10 @@ class Node:
         self.value = value
         self.left = left
         self.right = right
+        self.parent = None
     
     def __repr__(self):
-        return f"Left {self.left.value if self.left else None}  Value {self.value} Right {self.right.value if self.right else None}"
+        return f"Parent {self.parent if self.parent else None} Left {self.left.value if self.left else None}  Value {self.value} Right {self.right.value if self.right else None}"
     
 
 
@@ -27,10 +28,12 @@ class Heap:
             if not current.left:
                 print(f"current has no left, setting {current} left to {node}")
                 current.left = node
+                node.parent = current
                 break
             if not current.right:
                 print(f"current has no right, setting {current} right to {node}")
                 current.right = node
+                node.parent = current
                 break
             order.append(current.left)
             order.append(current.right)
@@ -41,7 +44,7 @@ class Heap:
     def _bubble_up(self, node):
         while node:
             print(f"bubbling up {node}")
-            parent = self._find_parent(node)
+            parent = node.parent
             print(f"parent is {parent}")
             if parent and parent.value > node.value:
                 print(f"swapping {parent} and {node}")
@@ -49,18 +52,6 @@ class Heap:
                 node = parent
             else:
                 break
-
-    def _find_parent(self, node):
-        order = [self.root]
-        while order:
-            current = order.pop(0)
-            if current.left and current.left == node or current.right and current.right == node:
-                return current
-            if current.left:
-                order.append(current.left)
-            if current.right:
-                order.append(current.right)
-        return None
 
 
     def __iter__(self):
